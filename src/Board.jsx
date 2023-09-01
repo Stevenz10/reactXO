@@ -1,10 +1,9 @@
 import React from 'react'
 import Square from './Square'
-import { useState } from 'react'
 
 export default function Board({ xIsNext, squares, onPlay }) {
-
     const winner = calculateWinner(squares);
+    const board = []
     let status;
     if (winner) {
       status = "Winner: " + winner;
@@ -12,6 +11,20 @@ export default function Board({ xIsNext, squares, onPlay }) {
       status = "Next player: " + (xIsNext ? "X" : "O");
     }
 
+    for (let i = 0; i < 3; i++) {
+      const cols = [];
+      for (let j = 0; j < 3; j++) {
+        const id = i * 3 + j;
+        cols.push(
+          <Square
+            key={id}
+            value={squares[id]}
+            onSquareClick={() => handleClick(id, xIsNext)}
+          />
+        );
+      }
+      board.push(<div key={i} className="board-row">{cols}</div>);
+    }
     function handleClick(id,xIsNext) {
         const nextSquares = squares.slice();
         if(squares[id] || calculateWinner(squares)){
@@ -48,21 +61,9 @@ export default function Board({ xIsNext, squares, onPlay }) {
   return (
     <div>
         <div className="status">{status}</div>
-        <div className='board-row'>
-            <Square value={squares[0]} onSquareClick={() =>handleClick(0,xIsNext)}/>
-            <Square value={squares[1]} onSquareClick={() =>handleClick(1,xIsNext)}/>
-            <Square value={squares[2]} onSquareClick={() =>handleClick(2,xIsNext)}/>
-        </div>
-        <div className='board-row'>
-            <Square value={squares[3]} onSquareClick={() =>handleClick(3,xIsNext)}/>
-            <Square value={squares[4]} onSquareClick={() =>handleClick(4,xIsNext)}/>
-            <Square value={squares[5]} onSquareClick={() =>handleClick(5,xIsNext)}/>
-        </div>  
-        <div className='board-row'>
-            <Square value={squares[6]} onSquareClick={() =>handleClick(6,xIsNext)}/>
-            <Square value={squares[7]} onSquareClick={() =>handleClick(7,xIsNext)}/>
-            <Square value={squares[8]} onSquareClick={() =>handleClick(8,xIsNext)}/>
-        </div>
+        {board}
     </div>
   )
 }
+
+
