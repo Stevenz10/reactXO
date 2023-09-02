@@ -6,7 +6,11 @@ export default function Board({ xIsNext, squares, onPlay }) {
     const board = []
     let status;
     if (winner) {
-      status = "Winner: " + winner[3];
+      if (winner.includes("draw")) {
+        status = "Draw";
+      } else {
+        status = "Winner: " + winner[3];
+      }
     } else {
       status = "Next player: " + (xIsNext ? "X" : "O");
     }
@@ -15,7 +19,6 @@ export default function Board({ xIsNext, squares, onPlay }) {
       const cols = [];
       for (let j = 0; j < 3; j++) {
         const id = i * 3 + j;
-        console.log(winner);
         if (winner && winner.includes(id)) {
           cols.push(
             <Square
@@ -66,8 +69,11 @@ export default function Board({ xIsNext, squares, onPlay }) {
         for (let i = 0; i < lines.length; i++) {
           const [a, b, c] = lines[i];
           if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-            lines[i].push(squares[a]); // [0,1,2,'X'] 
+            lines[i].push(squares[a]); 
             return lines[i];
+          }
+          else if(!squares.includes(null)){
+            return ["draw"];
           }
         }
         return null;
